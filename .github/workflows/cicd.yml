@@ -1,0 +1,52 @@
+name: CICD
+
+
+on:
+  push:
+    branches:
+      - master
+
+jobs: 
+
+  publish:
+    name: Compile and publish
+    
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Install Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 15.x
+          
+      - name: Run NPM install
+        run: npm install
+
+      - name: Compile
+        run: npm run 'compile'
+
+      - name: Test
+        run: npm run 'test'
+
+      - name: Configure Git
+        run: |
+          # 'github-actions[bot]@users.noreply.github.com' OR action@github.com OR 41898282+github-actions[bot]@users.noreply.github.com
+          # from https://api.github.com/users/github-actions%5Bbot%5D
+          git config --local user.email 'github-actions[bot]@users.noreply.github.com'
+          #'github-actions[bot]' OR "GitHub Action"
+          git config --local user.name 'github-actions[bot]'
+
+      - name: Publish to marketplace
+        run: npm run 'publish minor'
+        env:
+          VSCE_PAT: ${{ secrets.VSCE_PAT }}
+
+      - name: Push new version & tag
+        run: git push --follow-tags
+
+

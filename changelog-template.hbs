@@ -1,0 +1,38 @@
+### Changelog
+
+All notable changes to this project will be documented in this file.
+
+{{#each releases}}
+  {{#if href}}
+    ## [{{title}}]({{href}})
+  {{else}}
+    ## {{title}}
+  {{/if}}
+    ---
+
+  {{#each merges}}
+    - {{#if commit.breaking}}**Breaking change:** {{/if}}{{message}}{{#if href}} [`#{{id}}`]({{href}}){{/if}}
+  {{/each}}
+  {{#each fixes}}
+    - {{#if commit.breaking}}**Breaking change:** {{/if}}{{commit.subject}}{{#each fixes}}{{#if href}} [`#{{id}}`]({{href}}){{/if}}{{/each}}
+  {{/each}}
+  {{!-- {{#each commits}}
+    - {{#if breaking}}**Breaking change:** {{/if}}{{subject}}{{#if href}} [`{{shorthash}}`]({{href}}){{/if}}
+  {{/each}} --}}
+
+  {{! List commits with `Breaking change: ` somewhere in the message }}
+  {{#commit-list commits heading='### Breaking Changes' message='Breaking change:'}}
+    - {{subject}} [`{{shorthash}}`]({{href}})
+  {{/commit-list}}
+
+  {{! List commits that add new features, but not those already listed above }}
+  {{#commit-list commits heading='### New Features' message='[F|f]eat:' exclude='Breaking change:'}}
+    - {{subject}} [`{{shorthash}}`]({{href}})
+  {{/commit-list}}
+
+    {{! List other commits but not those already listed above }}
+  {{#commit-list commits heading='### Commits' exclude='[B|b]reaking change:|[F|f]eat:'}}
+    - {{subject}} [`{{shorthash}}`]({{href}})
+  {{/commit-list}}
+
+{{/each}}
