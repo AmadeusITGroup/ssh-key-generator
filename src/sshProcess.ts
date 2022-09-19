@@ -42,7 +42,7 @@ export class SSHProcess {
 
         if (!fs.existsSync(this.SSHFolder)) {
             log(`Folder ${this.SSHFolder} doesn't exist. Create it`);
-            fs.mkdirSync(this.SSHFolder);
+            fs.mkdirSync(this.SSHFolder, {recursive: true});
         }
 
         this.UserSSHConfigFilePath = path.join(this.SSHFolder, 'config');
