@@ -38,6 +38,9 @@ jobs:
 
       - name: Compile
         run: npm run 'compile'
+      
+      - name: Linter
+        run: npm run lint
 
       - name: Test on Linux
         if: runner.os == 'Linux'

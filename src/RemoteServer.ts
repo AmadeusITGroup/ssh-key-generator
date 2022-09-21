@@ -10,8 +10,7 @@ export interface hostPickItem extends vscode.QuickPickItem {
 
 export async function getRemoteServerFromUserInput(hostsList: hostPickItem[]): Promise<string> {
 
-    let hostname: string|undefined;
-    hostname = await selectRemoteServerFromHostsList(hostsList);
+    const hostname = await selectRemoteServerFromHostsList(hostsList);
     if (!hostname) {
         throw new CancelError('User canceled the selectserver box');
     }
