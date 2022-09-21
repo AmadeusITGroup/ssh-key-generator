@@ -1,28 +1,37 @@
+
+# Documentation
+# https://code.visualstudio.com/api/working-with-extensions/continuous-integration#github-actions
 name: CICD
 
 
 on:
   push:
     branches:
-      - master
+      - "**"
+  pull_request:
+    branches: 
+      - "**"
 
 jobs: 
 
-  publish:
-    name: Compile and publish
+  build:
+    name: Compile and test
     
     # The type of runner that the job will run on
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [macos-latest, ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Install Node.js
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v3
         with:
-          node-version: 15.x
+          node-version: 16.x
           
       - name: Run NPM install
         run: npm install
@@ -30,9 +39,20 @@ jobs:
       - name: Compile
         run: npm run 'compile'
 
-      - name: Test
+      - name: Test on Linux
+        if: runner.os == 'Linux'
+        run: xvfb-run -a npm run 'test'
+      
+      - name: Test on OS != Linux
+        if: runner.os != 'Linux'
         run: npm run 'test'
 
+  publish:
+    name: Publish
+    runs-on: ubuntu-latest
+    needs: build
+    if: success() && github.ref_name == 'master'
+    steps:
       - name: Configure Git
         run: |
           # 'github-actions[bot]@users.noreply.github.com' OR action@github.com OR 41898282+github-actions[bot]@users.noreply.github.com
@@ -41,12 +61,19 @@ jobs:
           #'github-actions[bot]' OR "GitHub Action"
           git config --local user.name 'github-actions[bot]'
 
+      # The tag should be done before the publishing. 
+      # if the publishing is succesful but not the tagging we can't deliver automatically the next version. The bump should be done manually
+      - name: Push new version & tag
+        if: success() && matrix.os == 'ubuntu-latest'
+        run: git push --follow-tags
+
+        
       - name: Publish to marketplace
+        if: success() && matrix.os == 'ubuntu-latest'
         run: npm run 'publish minor'
         env:
           VSCE_PAT: ${{ secrets.VSCE_PAT }}
 
-      - name: Push new version & tag
-        run: git push --follow-tags
+
 
 

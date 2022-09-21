@@ -2,7 +2,7 @@
     "name": "ssh-key-generator",
     "displayName": "SSH key generator",
     "description": "This extension will generate key to be used by SSH protocol and Remote-SSH extension. It will deploy it on the remote server and update the ssh config file.",
-    "version": "1.0.0",
+    "version": "1.2.0",
     "publisher": "amadeus",
     "repository": {
         "type": "github",
@@ -82,9 +82,11 @@
         "package": "vsce package -o ssh-key-generator.vsix",
         "installExtension": "code --install-extension ssh-key-generator.vsix --force",
         "publish": "vsce publish",
+        "publish patch": "vsce publish patch -m 'Release v%s'",
+        "publish minor": "vsce publish minor -m 'Release v%s'",
+        "publish major": "vsce publish major -m 'Release v%s'",
         "version": "auto-changelog -p && git add CHANGELOG.md",
         "pre-commit": "npm run npm_reinstall && npm run recompile && npm run test && npm run fix-lint && npm run lint && npm run package && npm pack"
-
     },
     "devDependencies": {
         "@types/glob": "^7.2.0",
