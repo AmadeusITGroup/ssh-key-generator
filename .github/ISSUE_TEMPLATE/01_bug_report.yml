@@ -1,0 +1,38 @@
+name: Bug Report
+description: Something not working as expected
+title: "[Bug]: "
+labels: ["bug", "toAnalyze"]
+body:
+  - type: input
+    attributes:
+      label: extension version
+      description: Version visible from the "Extensions" view.
+    validations:
+      required: true
+  
+  - type: input
+    attributes:
+      label: Operating system
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Current behavior / Step to reproduce
+      description: Describe how the issue manifests and steps to reproduce the behavior
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Expected behavior
+      description: Describe what the desired behavior would be.
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Logs
+      description: Please attach the extension log from the "Output" view => SSH key generator.
+    validations:
+      required: false

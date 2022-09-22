@@ -1,0 +1,25 @@
+name: Feature request
+description: Suggest an idea
+title: "[Feature]: "
+labels: ["feature", "toAnalyze"]
+body:
+  - type: textarea
+    attributes:
+      label: New feature context
+      description: Describe the context, the use-case and the advantages of the feature request.
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: New feature description
+      description: Describe the functional changes that would have to be made.
+    validations:
+      required: false
+
+  - type: textarea
+    attributes:
+      label: New feature implementation
+      description: Optionally describe the technical changes to be made.
+    validations:
+      required: false
