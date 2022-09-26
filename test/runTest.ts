@@ -10,8 +10,10 @@ async function main() {
 
 		// The path to test runner
 		// Passed to --extensionTestsPath
-		const extensionTestsPath = path.resolve(__dirname, './suite/index');
-
+		let extensionTestsPath = path.resolve(__dirname, './suite/index');
+		if (process.argv.includes('--coverage')) {
+			extensionTestsPath = path.resolve(__dirname, './suite/indexCoverage');
+		}
 		// Download VS Code, unzip it and run the integration test
 		//await runTests({ extensionDevelopmentPath, extensionTestsPath });
 
@@ -29,7 +31,7 @@ async function main() {
 			 * See `code --help` for possible arguments.
 			 */
 			launchArgs: ['--disable-extensions']
-		  });
+		});
 
 	} catch (err) {
 		console.error('Failed to run tests');
