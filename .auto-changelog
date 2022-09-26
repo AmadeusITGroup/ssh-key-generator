@@ -1,0 +1,9 @@
+{
+  "unreleased": false,
+  "commitLimit": 3,
+  "ignoreCommitPattern": "^(Release).*$",
+  "hide-credit": true,
+  "sort-commits": "relevant",
+  "template":  "changelogData/changelog-template.hbs",
+  "handlebarsSetup": "changelogData/handlebars-setup.js"
+}

@@ -3,7 +3,6 @@
 # https://code.visualstudio.com/api/working-with-extensions/continuous-integration#github-actions
 name: CICD
 
-
 on:
   push:
     branches:
@@ -58,7 +57,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-
+        with:
+              fetch-depth: 0
+              
       - name: Install Node.js
         uses: actions/setup-node@v3
         with:
@@ -75,14 +76,29 @@ jobs:
           #'github-actions[bot]' OR "GitHub Action"
           git config --local user.name 'github-actions[bot]'
 
+      #https://github.com/marketplace/actions/git-semantic-version
+      - name: "Generate new version"
+        uses: paulhatch/semantic-version@v4.0.2
+        id: semantic-version
+        with:
+          tag_prefix: "v"
+          major_pattern: "/((BREAKING CHANGE|major):?|\\S*!).*/"
+          minor_pattern: "/(feature|minor|feat):?[^!].*/"
+          format: "${major}.${minor}.${patch}"
+          namespace: ""
+          bump_each_commit: false
+          search_commit_body: false
+          user_format_type: "csv"
+
+      - run: echo version generated ${{ steps.semantic-version.outputs.version }}
+
+      # https://code.visualstudio.com/api/working-with-extensions/publishing-extension#autoincrementing-the-extension-version
       - name: Publish to marketplace
         if: success() && matrix.os == 'ubuntu-latest'
-        run: npm run 'publish patch'
+        run: npm run publishVersion --newversion=${{ steps.semantic-version.outputs.version }}
         env:
           VSCE_PAT: ${{ secrets.VSCE_PAT }}
 
-      - name: Push new version & tag
+      - name: Push the new version & tag
         if: success() && matrix.os == 'ubuntu-latest'
         run: git push --follow-tags
-
-
