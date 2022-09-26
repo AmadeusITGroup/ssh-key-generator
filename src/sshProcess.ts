@@ -12,26 +12,28 @@ import { updateStatusBar } from './services/statusBar';
 import { getRemoteServerFromUserInput, hostPickItem } from './RemoteServer';
 import { CancelError } from './services/error';
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const { NodeSSH } = require('node-ssh');
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const SSH_Config = require('ssh-config');
 
 
 
 export class SSHProcess {
     userName: string|undefined = undefined;
-    SSHPrivateKeyPath: string = '';
-    SSHPublicKeyPath: string = '';
+    SSHPrivateKeyPath = '';
+    SSHPublicKeyPath = '';
     SSHConfigFilePath: string;
     UserSSHConfigFilePath: string;
     VSCodeSSHConfigFilePath: string;
     SSHFolder: string;
-    private hostname: string = '';
+    private hostname = '';
     remoteServer: any;
     homedir: string;
-    SSHKeyName: string = '';
+    SSHKeyName = '';
     custonConfig: boolean;
-    retry: number = 0;
-    createkey: boolean = false;
+    retry = 0;
+    createkey = false;
 
 
     constructor() {
@@ -79,7 +81,7 @@ export class SSHProcess {
     /*
     * Entry point to start the process of SSH key creation
     */
-    public async run(recreateKey: boolean = false) {
+    public async run(recreateKey = false) {
 
         // No hostname provided during the call of the command,
         // Ask the user to select one
@@ -156,7 +158,7 @@ export class SSHProcess {
 
             if (!section) {
                 const SSHConfigContent = fs.readFileSync(this.UserSSHConfigFilePath, 'utf8');
-                var config = SSH_Config.parse(SSHConfigContent);
+                const config = SSH_Config.parse(SSHConfigContent);
 
                 // Put Include just after all include already in the SSH conf thanks to the paramter true
                 config.prepend({
@@ -178,7 +180,7 @@ export class SSHProcess {
         updateStatusBar(`Checking if ${hostname} is reachable...`);
 
         log(`Checking if ${hostname} is reachable...`);
-        let sshConnectionData = this.getNodeSSHConfig(hostname);
+        const sshConnectionData = this.getNodeSSHConfig(hostname);
         if (!Object.keys(sshConnectionData).length) {
             throw new Error(`${hostname} is not defined in the SSH config file.`);
         }
@@ -199,7 +201,7 @@ export class SSHProcess {
     /*
     * Test the SSH connection to the host
     */
-    private async runSSHConnection(sshConnectionData: any) {
+    private async runSSHConnection(sshConnectionData: any): Promise<{result: boolean, error: any}> {
         log('-- Execute runSSHConnection with the config:', sshConnectionData);
 
         const ssh = new NodeSSH();
@@ -352,9 +354,10 @@ export class SSHProcess {
     public async checkSSHconnection(): Promise<boolean> {
 
         const sshConnectionData = this.getNodeSSHConfig(this.hostname);
+        let result: any;
         if (sshConnectionData.privateKey) {
             log("privateKey already defined in the SSH config");
-            var result = await this.runSSHConnection(sshConnectionData);
+            result = await this.runSSHConnection(sshConnectionData);
         } else {
             log("Check all default private keys");
             const files: any = [];
@@ -384,7 +387,7 @@ export class SSHProcess {
                     sshConnectionDataTmp.privateKey = path.join(this.SSHFolder, sshKeyName);
                 }
 
-                var result = await this.runSSHConnection(sshConnectionDataTmp);
+                result = await this.runSSHConnection(sshConnectionDataTmp);
 
                 if (result.result) {
                     this.addIdentityFileToSSHConfig(path.join(this.SSHFolder, sshKeyName));
@@ -427,7 +430,7 @@ export class SSHProcess {
         if (!section) {
             log(`Add the new host ${newHostname} in the SSH config`);
             const SSHConfigContent = fs.readFileSync(this.SSHConfigFilePath, 'utf8');
-            let config = SSH_Config.parse(SSHConfigContent);
+            const config = SSH_Config.parse(SSHConfigContent);
 
             config.append({
                 Host: newHostname,
@@ -475,7 +478,7 @@ export class SSHProcess {
 
 
         const SSHConfigContent = fs.readFileSync(this.SSHConfigFilePath, 'utf8');
-        var config = SSH_Config.parse(SSHConfigContent);
+        const config = SSH_Config.parse(SSHConfigContent);
             
         config.remove((line: { param: string; value: string; }) => line.param && line.param.toLowerCase() === 'Host'.toLowerCase() && line.value === this.hostname);
 
@@ -533,7 +536,7 @@ export class SSHProcess {
 
             // remove the old host config
             const SSHConfigContent = fs.readFileSync(this.SSHConfigFilePath, 'utf8');
-            var config = SSH_Config.parse(SSHConfigContent);
+            const config = SSH_Config.parse(SSHConfigContent);
             
             config.remove((line: { param: string; value: string; }) => line.param && line.param.toLowerCase() === 'Host'.toLowerCase() && line.value === this.hostname);
 
@@ -648,7 +651,7 @@ export class SSHProcess {
     // Get the conf from the SSH config
     private findSectionInSSHConfig(param: string, value: string) {
         const SSHConfigContent = fs.readFileSync(this.SSHConfigFilePath, 'utf8');
-        var config = SSH_Config.parse(SSHConfigContent);
+        const config = SSH_Config.parse(SSHConfigContent);
 
         // Can't used the easy way proposed in the documentation. 
         // The find is done using the case if the configuration use lowerCase, upperCase it won't work
@@ -663,9 +666,9 @@ export class SSHProcess {
             return;
         }
         const section = this.findSectionInSSHConfigFromHost(hostname);
-
+        let  newSSHConfig: any = {};
         if (section) {
-            var newSSHConfig: any = {
+            newSSHConfig = {
                 Host: hostname
             };
 
