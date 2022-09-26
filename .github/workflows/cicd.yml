@@ -53,6 +53,17 @@ jobs:
     needs: build
     if: success() && github.ref_name == 'master'
     steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.x
+          
+      - name: Run NPM install
+        run: npm install
+
       - name: Configure Git
         run: |
           # 'github-actions[bot]@users.noreply.github.com' OR action@github.com OR 41898282+github-actions[bot]@users.noreply.github.com
@@ -61,19 +72,14 @@ jobs:
           #'github-actions[bot]' OR "GitHub Action"
           git config --local user.name 'github-actions[bot]'
 
-      # The tag should be done before the publishing. 
-      # if the publishing is succesful but not the tagging we can't deliver automatically the next version. The bump should be done manually
-      - name: Push new version & tag
-        if: success() && matrix.os == 'ubuntu-latest'
-        run: git push --follow-tags
-
-        
       - name: Publish to marketplace
         if: success() && matrix.os == 'ubuntu-latest'
-        run: npm run 'publish minor'
+        run: npm run 'publish patch'
         env:
           VSCE_PAT: ${{ secrets.VSCE_PAT }}
 
-
+      - name: Push new version & tag
+        if: success() && matrix.os == 'ubuntu-latest'
+        run: git push --follow-tags
 
 
