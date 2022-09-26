@@ -1,0 +1,54 @@
+# Changelog
+
+All changes to this project will be documented in this file.
+
+{{#each releases}}
+  {{#if href}}
+    ## [{{title}}]({{href}})
+  {{else}}
+    ## {{title}}
+  {{/if}}
+  > {{niceDate}}
+
+  ---
+
+  {{#if merges}}
+    ### Merged
+    {{#each merges}}
+      - {{message}} {{#if (externalContributor author)}}(Thanks @{{author}}){{/if}}{{#if href}} - [`#{{id}}`]({{href}}){{/if}}
+    {{/each}}
+  {{/if}}
+
+  {{#if fixes}}
+    ### Fixed
+
+    {{#each fixes}}
+      - {{#if commit.breaking}}**Breaking change:** {{/if}}{{commit.subject}}{{#each fixes}} {{#if href}}[`#{{id}}`]({{href}}){{/if}}{{/each}}
+    {{/each}}
+  {{/if}}
+
+  {{#if commits}}
+      ### Commits
+      {{#each commits}}
+      - {{subject}} {{#if (externalContributor author)}}(Thanks @{{author}}){{/if}}{{#if href}} - [`#{{shorthash}}`]({{href}}){{/if}}
+      {{/each}}
+  {{/if}}
+
+{{!-- Below other exemples to generate the changelogs. mainly to categorized each king of changes --}}
+
+  {{!-- {{! List commits with `Breaking change: ` somewhere in the message }}
+  {{#commit-list commits heading='### Breaking Changes' message='Breaking change:'}}
+    - {{subject}} by {{author}}[`{{shorthash}}`]({{href}})
+  {{/commit-list}}
+
+  {{! List commits that add new features, but not those already listed above }}
+  {{#commit-list commits heading='### New Features' message='[F|f]eat:' exclude='Breaking change:'}}
+    - {{subject}} [`{{shorthash}}`]({{href}})
+  {{/commit-list}}
+
+  {{! List other commits but not those already listed above }}
+  {{#commit-list commits heading='### Commits' exclude='[B|b]reaking change:|[F|f]eat:'}}
+    - {{subject}}  (Thanks @{{author}}) in [#`{{shorthash}}`]({{href}})
+  {{/commit-list}} --}}
+
+{{/each}}
