@@ -4,6 +4,7 @@
     "description": "This extension will generate key to be used by SSH protocol and Remote-SSH extension. It will deploy it on the remote server and update the ssh config file.",
     "version": "1.0.0",
     "publisher": "amadeus",
+    "icon": "icons/SSH-key-generator-256.png",
     "repository": {
         "type": "github",
         "url": "https://github.com/AmadeusITGroup/ssh-key-generator.git"
@@ -33,7 +34,8 @@
     ],
     "main": "./out/src/index.js",
     "files": [
-        "ssh-key-generator.vsix"
+        "ssh-key-generator.vsix",
+        "icons/SSH-key-generator-256.png"
     ],
     "contributes": {
         "commands": [
