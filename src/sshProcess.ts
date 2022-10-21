@@ -127,6 +127,7 @@ export class SSHProcess {
         }
 
         updateStatusBar(undefined);
+        vscode.window.showInformationMessage(`SSH key generated and deployed on ${this.hostname}!`);
         return this.hostname;
     }
 

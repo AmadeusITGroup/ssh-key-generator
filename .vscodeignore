@@ -13,3 +13,6 @@ vsc-extension-quickstart.md
 **/*.ts
 .auto-changelog
 changelog-template.hbs
+.github/**
+test/**
+changelogData/**

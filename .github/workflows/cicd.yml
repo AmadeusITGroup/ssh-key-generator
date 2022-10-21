@@ -94,11 +94,11 @@ jobs:
 
       # https://code.visualstudio.com/api/working-with-extensions/publishing-extension#autoincrementing-the-extension-version
       - name: Publish to marketplace
-        if: success() && matrix.os == 'ubuntu-latest'
+        if: success()
         run: npm run publishVersion --newversion=${{ steps.semantic-version.outputs.version }}
         env:
           VSCE_PAT: ${{ secrets.VSCE_PAT }}
 
       - name: Push the new version & tag
-        if: success() && matrix.os == 'ubuntu-latest'
+        if: success()
         run: git push --follow-tags
