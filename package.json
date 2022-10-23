@@ -2,7 +2,7 @@
     "name": "ssh-key-generator",
     "displayName": "SSH key generator",
     "description": "This extension will generate key to be used by SSH protocol and Remote-SSH extension. It will deploy it on the remote server and update the ssh config file.",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "publisher": "AmadeusITGroup",
     "icon": "icons/SSH-key-generator-256.png",
     "repository": {
@@ -92,7 +92,6 @@
         "changelog": "auto-changelog -p",
         "version": "auto-changelog -p && git add CHANGELOG.md",
         "pre-commit": "npm run npm_reinstall && npm run recompile && npm run test && npm run fix-lint && npm run lint && npm run package"
-
     },
     "devDependencies": {
         "@istanbuljs/nyc-config-typescript": "^1.0.2",
