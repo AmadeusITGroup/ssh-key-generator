@@ -8,7 +8,7 @@ import { after, before } from 'mocha';
 
 import { context } from '../../src/services/context';
 
-export const extension = vscode.extensions.getExtension('amadeus.ssh-key-generator');
+export const extension = vscode.extensions.getExtension('AmadeusITGroup.ssh-key-generator');
 
 suite('Extension Test Suite', () => {
 
