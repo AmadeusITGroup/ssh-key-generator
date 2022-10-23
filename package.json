@@ -3,7 +3,7 @@
     "displayName": "SSH key generator",
     "description": "This extension will generate key to be used by SSH protocol and Remote-SSH extension. It will deploy it on the remote server and update the ssh config file.",
     "version": "1.0.0",
-    "publisher": "amadeus",
+    "publisher": "AmadeusITGroup",
     "icon": "icons/SSH-key-generator-256.png",
     "repository": {
         "type": "github",
