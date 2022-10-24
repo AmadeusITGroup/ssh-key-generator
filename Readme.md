@@ -1,12 +1,12 @@
 # SSH key generator VSCode Extension
 
 This VSCode Extension allows users to generate SSH key pair and deploy it on remote server.
-So users can use Remote-SSH to connect to any remote server whithout enter any password. It's faster the connection.
+So users can use Remote-SSH to connect to any remote server whithout enter any password. It fasters the connection.
 
-For more security, the key is suffix with the name of the host.
+For more security, the key is suffixed with the name of the host.
 One key is used by only one host.
 
-It provides several commands.
+It provides several commands:
 
 # Commands
 * Generate SSH key
