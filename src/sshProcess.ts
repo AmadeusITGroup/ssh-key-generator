@@ -411,6 +411,10 @@ export class SSHProcess {
             config = SSH_Config.parse(SSHConfigContent);
 
             for (const SSHhost of config) {
+                // When param is not defined, it means that it's not a ssh config. More often it's a comment
+                if (!SSHhost.param) { 
+                    continue;
+                }
                 if (SSHhost.param.toUpperCase() === 'Host'.toUpperCase()) {
                     existingSSHHost.push(
                         {
@@ -617,16 +621,17 @@ export class SSHProcess {
         if (section) {
             for (const line of section.config) {
                 if (line.param) {
-                    if (line.param.toUpperCase() === 'User'.toUpperCase()) {
+                    const lineParam = line.param.toUpperCase();
+                    if (lineParam === 'User'.toUpperCase()) {
                         sshConnectionData.username = line.value;
                     }
-                    if (line.param.toUpperCase() === 'Port'.toUpperCase()) {
+                    if (lineParam === 'Port'.toUpperCase()) {
                         sshConnectionData.port = line.value;
                     }
-                    if (line.param.toUpperCase() === 'Hostname'.toUpperCase()) {
+                    if (lineParam === 'Hostname'.toUpperCase()) {
                         sshConnectionData.host = line.value;
                     }
-                    if (line.param.toUpperCase() === 'IdentityFile'.toUpperCase()) {
+                    if (lineParam === 'IdentityFile'.toUpperCase()) {
                         sshConnectionData.privateKey = line.value.replace('~', this.homedir);
                     }
                 }
